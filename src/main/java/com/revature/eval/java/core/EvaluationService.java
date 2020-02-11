@@ -1,6 +1,9 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +18,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -30,8 +33,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String acc = "";
+		acc += phrase.charAt(0);
+
+		for (int i = 0; i < phrase.length(); i++) {
+			if (phrase.charAt(i) == ' ') {
+				acc += phrase.charAt(i + 1);
+			}
+		}
+
+		return acc;
+
 	}
 
 	/**
@@ -84,17 +96,25 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if (getSideOne() == getSideTwo() && getSideTwo() == getSideThree()) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+
+			if (!isEquilateral() && (getSideOne() == getSideTwo() || getSideTwo() == getSideThree()
+					|| getSideOne() == getSideThree())) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if (!isEquilateral() && !isIsosceles()) {
+				return true;
+			}
 			return false;
 		}
 
@@ -116,8 +136,54 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+
+		int score = 0;
+		for (int i = 0; i < string.length(); i++) {
+
+			if (string.charAt(i) == 'A' || string.charAt(i) == 'a' || string.charAt(i) == 'E' || string.charAt(i) == 'e'
+					|| string.charAt(i) == 'I' || string.charAt(i) == 'i' || string.charAt(i) == 'O'
+					|| string.charAt(i) == 'o' || string.charAt(i) == 'U' || string.charAt(i) == 'u'
+					|| string.charAt(i) == 'L' || string.charAt(i) == 'l' || string.charAt(i) == 'N'
+					|| string.charAt(i) == 'n' || string.charAt(i) == 'R' || string.charAt(i) == 'r'
+					|| string.charAt(i) == 'S' || string.charAt(i) == 's' || string.charAt(i) == 'T'
+					|| string.charAt(i) == 't') {
+				score += 1;
+			}
+
+			if (string.charAt(i) == 'D' || string.charAt(i) == 'd' || string.charAt(i) == 'G'
+					|| string.charAt(i) == 'g') {
+				score += 2;
+			}
+
+			if (string.charAt(i) == 'B' || string.charAt(i) == 'b' || string.charAt(i) == 'C' || string.charAt(i) == 'c'
+					|| string.charAt(i) == 'M' || string.charAt(i) == 'm' || string.charAt(i) == 'P'
+					|| string.charAt(i) == 'p') {
+				score += 3;
+			}
+
+			if (string.charAt(i) == 'H' || string.charAt(i) == 'h' || string.charAt(i) == 'V' || string.charAt(i) == 'v'
+					|| string.charAt(i) == 'W' || string.charAt(i) == 'w' || string.charAt(i) == 'Y'
+					|| string.charAt(i) == 'y') {
+				score += 4;
+			}
+
+			if (string.charAt(i) == 'J' || string.charAt(i) == 'j' || string.charAt(i) == 'X'
+					|| string.charAt(i) == 'x') {
+				score += 8;
+			}
+
+			if (string.charAt(i) == 'K' || string.charAt(i) == 'k') {
+				score += 5;
+			}
+
+			if (string.charAt(i) == 'Z' || string.charAt(i) == 'z') {
+				score += 10;
+			}
+
+		}
+
+		return score;
+
 	}
 
 	/**
@@ -152,8 +218,24 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String clean = "";
+
+		for (int i = 0; i < string.length(); i++) {
+
+			if (Character.isDigit(string.charAt(i))) {
+				clean += string.charAt(i);
+			}
+		}
+
+		if (clean.length() == 11 && clean.charAt(0) == '1') {
+			clean = clean.substring(1);
+		}
+
+		if (clean.length() != 10) {
+			throw new IllegalArgumentException("Not 10 Digits");
+		}
+
+		return clean;
 	}
 
 	/**
@@ -166,8 +248,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		String[] words = string.split(" ");
+
+		Map<String, Integer> mapA = new HashMap<String, Integer>();
+
+		int old;
+
+		for (String word : words) {
+			if (!mapA.containsKey(word)) {
+				mapA.put(word, 1);
+			} else {
+				old = mapA.get(word);
+				mapA.put(word, old + 1);
+			}
+		}
+
+		return mapA;
 	}
 
 	/**
@@ -246,8 +343,43 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String ret = "";
+
+		boolean first = true;
+
+		String[] words = string.split(" ");
+
+		for (String word : words) {
+
+			if (first) {
+				first = false;
+			} else {
+				ret += " ";
+			}
+
+			int firstVowelNum = 0;
+
+			for (int i = 0; i < word.length(); i++) {
+				if (word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o'
+						|| word.charAt(i) == 'u' || word.charAt(i) == 'A' || word.charAt(i) == 'E'
+						|| word.charAt(i) == 'I' || word.charAt(i) == 'O' || word.charAt(i) == 'U') {
+					firstVowelNum = i;
+					break;
+				}
+			}
+
+			for (int i = firstVowelNum; i < word.length(); i++) {
+				ret += word.charAt(i);
+			}
+
+			for (int i = 0; i < firstVowelNum; i++) {
+				ret += word.charAt(i);
+			}
+
+			ret += "ay";
+
+		}
+		return ret;
 	}
 
 	/**
@@ -266,8 +398,29 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		if (input > 2000000000)
+			throw new IllegalArgumentException("Too Large");
+		if (input < 1)
+			throw new IllegalArgumentException("Positive Only");
+
+		int digits = 0;
+		int i = 1;
+		int powPow = 10;
+		for (; input / powPow != 0; i++) {
+			powPow *= 10;
+		}
+
+		digits = i;
+
+		int testArm = 0;
+
+		powPow = 1;
+		for (i = 0; i < digits + 1; i++) {
+			testArm += Math.pow(((input / powPow) % 10), digits);
+			powPow *= 10;
+		}
+
+		return testArm == input;
 	}
 
 	/**
@@ -281,8 +434,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		if (l < 2)
+			throw new IllegalArgumentException("Bigger Than 2");
+
+		List<Long> returnList = new LinkedList<Long>();
+		long input = l;
+
+		for (int i = 2; i <= input; i++) {
+			if (isPrime(i)) {
+				if (input % i == 0) {
+					returnList.add((long) i);
+					input /= i;
+					i = 1;
+				}
+			}
+		}
+
+		return returnList;
 	}
 
 	/**
@@ -320,8 +488,28 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String cipher = "";
+
+			for (int i = 0; i < string.length(); i++) {
+
+				if (string.charAt(i) >= 'A' && string.charAt(i) <= 'Z') {
+					// if it's a capital letter
+					if (string.charAt(i) + key > 'Z')
+						cipher += (char) (string.charAt(i) + key - 26);
+					else
+						cipher += (char) (string.charAt(i) + key);
+
+				} else if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+					// if it's a lowercase letter
+					if (string.charAt(i) + key > 'z')
+						cipher += (char) (string.charAt(i) + key - 26);
+					else
+						cipher += (char) (string.charAt(i) + key);
+				} else
+					cipher += string.charAt(i);
+
+			}
+			return cipher;
 		}
 
 	}
@@ -339,8 +527,43 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+
+		if (i < 1) {
+
+			throw new IllegalArgumentException("Positive Integers Only");
+
+		}
+
+		int numPrimes = 0;
+
+		int k = 1;
+
+		for (; k < Integer.MAX_VALUE && numPrimes != i; k++) {
+			if (isPrime(k)) {
+				numPrimes++;
+			}
+		}
+
+		return k - 1;
+
+	}
+
+	public boolean isPrime(int i) {
+
+		if (i <= 1) {
+			return false;
+		}
+
+		if (i == 2) {
+			return true;
+		}
+
+		for (int j = 2; j < i; j++) {
+			if (i % j == 0)
+				return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -376,8 +599,35 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String cipher = "";
+			int checkFive = 0;
+			for (int i = 0; i < string.length(); i++) {
+				
+				if(checkFive == 5 && i != string.length()-1) {
+					cipher += " ";
+					checkFive = 0;
+				}
+				if (string.charAt(i) >= 'A' && string.charAt(i) <= 'Z') {
+					// if it's a capital letter
+					cipher += (char) ('a' + ('Z' - string.charAt(i)));
+					checkFive++;
+
+				}
+				
+				if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+					// if it's a lowercase letter
+					cipher += (char) ('a' + ('z' - string.charAt(i)));
+					checkFive++;
+				}
+				
+				if(Character.isDigit(string.charAt(i))){
+					cipher += string.charAt(i);
+					checkFive++;
+				}
+
+			}
+			return cipher;
+
 		}
 
 		/**
@@ -387,158 +637,183 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String cipher = "";
+			int checkFive = 0;
+
+			for (int i = 0; i < string.length(); i++) {
+				
+				if(checkFive == 5) {
+					i++;
+					checkFive = 0;
+				}
+
+				if (string.charAt(i) >= 'A' && string.charAt(i) <= 'Z') {
+					// if it's a capital letter
+					cipher += (char) ('a' + ('Z' - string.charAt(i)));
+
+				}
+				
+				if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+					// if it's a lowercase letter
+					cipher += (char) ('a' + ('z' - string.charAt(i)));
+				}
+				
+				if(Character.isDigit(string.charAt(i))){
+					cipher += string.charAt(i);
+				}
+				checkFive++;
+			}
+			return cipher;
 		}
 	}
 
-	/**
-	 * 15. The ISBN-10 verification process is used to validate book identification
-	 * numbers. These normally contain dashes and look like: 3-598-21508-8
-	 * 
-	 * ISBN The ISBN-10 format is 9 digits (0 to 9) plus one check character (either
-	 * a digit or an X only). In the case the check character is an X, this
-	 * represents the value '10'. These may be communicated with or without hyphens,
-	 * and can be checked for their validity by the following formula:
-	 * 
-	 * (x1 * 10 + x2 * 9 + x3 * 8 + x4 * 7 + x5 * 6 + x6 * 5 + x7 * 4 + x8 * 3 + x9
-	 * * 2 + x10 * 1) mod 11 == 0 If the result is 0, then it is a valid ISBN-10,
-	 * otherwise it is invalid.
-	 * 
-	 * Example Let's take the ISBN-10 3-598-21508-8. We plug it in to the formula,
-	 * and get:
-	 * 
-	 * (3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 *
-	 * 1) mod 11 == 0 Since the result is 0, this proves that our ISBN is valid.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+		/**
+		 * 15. The ISBN-10 verification process is used to validate book identification
+		 * numbers. These normally contain dashes and look like: 3-598-21508-8
+		 * 
+		 * ISBN The ISBN-10 format is 9 digits (0 to 9) plus one check character (either
+		 * a digit or an X only). In the case the check character is an X, this
+		 * represents the value '10'. These may be communicated with or without hyphens,
+		 * and can be checked for their validity by the following formula:
+		 * 
+		 * (x1 * 10 + x2 * 9 + x3 * 8 + x4 * 7 + x5 * 6 + x6 * 5 + x7 * 4 + x8 * 3 + x9
+		 * * 2 + x10 * 1) mod 11 == 0 If the result is 0, then it is a valid ISBN-10,
+		 * otherwise it is invalid.
+		 * 
+		 * Example Let's take the ISBN-10 3-598-21508-8. We plug it in to the formula,
+		 * and get:
+		 * 
+		 * (3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 *
+		 * 1) mod 11 == 0 Since the result is 0, this proves that our ISBN is valid.
+		 * 
+		 * @param string
+		 * @return
+		 */
+		public boolean isValidIsbn(String string) {
+			// TODO Write an implementation for this method declaration
+			return false;
+		}
 
-	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
-	 * gramma, "every letter") is a sentence using every letter of the alphabet at
-	 * least once. The best known English pangram is:
-	 * 
-	 * The quick brown fox jumps over the lazy dog.
-	 * 
-	 * The alphabet used consists of ASCII letters a to z, inclusive, and is case
-	 * insensitive. Input will not contain non-ASCII symbols.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+		/**
+		 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
+		 * gramma, "every letter") is a sentence using every letter of the alphabet at
+		 * least once. The best known English pangram is:
+		 * 
+		 * The quick brown fox jumps over the lazy dog.
+		 * 
+		 * The alphabet used consists of ASCII letters a to z, inclusive, and is case
+		 * insensitive. Input will not contain non-ASCII symbols.
+		 * 
+		 * @param string
+		 * @return
+		 */
+		public boolean isPangram(String string) {
+			// TODO Write an implementation for this method declaration
+			return false;
+		}
 
-	/**
-	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
-	 * 
-	 * A gigasecond is 109 (1,000,000,000) seconds.
-	 * 
-	 * @param given
-	 * @return
-	 */
-	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
-	}
+		/**
+		 * 17. Calculate the moment when someone has lived for 10^9 seconds.
+		 * 
+		 * A gigasecond is 109 (1,000,000,000) seconds.
+		 * 
+		 * @param given
+		 * @return
+		 */
+		public Temporal getGigasecondDate(Temporal given) {
+			// TODO Write an implementation for this method declaration
+			return null;
+		}
 
-	/**
-	 * 18. Given a number, find the sum of all the unique multiples of particular
-	 * numbers up to but not including that number.
-	 * 
-	 * If we list all the natural numbers below 20 that are multiples of 3 or 5, we
-	 * get 3, 5, 6, 9, 10, 12, 15, and 18.
-	 * 
-	 * The sum of these multiples is 78.
-	 * 
-	 * @param i
-	 * @param set
-	 * @return
-	 */
-	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
+		/**
+		 * 18. Given a number, find the sum of all the unique multiples of particular
+		 * numbers up to but not including that number.
+		 * 
+		 * If we list all the natural numbers below 20 that are multiples of 3 or 5, we
+		 * get 3, 5, 6, 9, 10, 12, 15, and 18.
+		 * 
+		 * The sum of these multiples is 78.
+		 * 
+		 * @param i
+		 * @param set
+		 * @return
+		 */
+		public int getSumOfMultiples(int i, int[] set) {
+			// TODO Write an implementation for this method declaration
+			return 0;
+		}
 
-	/**
-	 * 19. Given a number determine whether or not it is valid per the Luhn formula.
-	 * 
-	 * The Luhn algorithm is a simple checksum formula used to validate a variety of
-	 * identification numbers, such as credit card numbers and Canadian Social
-	 * Insurance Numbers.
-	 * 
-	 * The task is to check if a given string is valid.
-	 * 
-	 * Validating a Number Strings of length 1 or less are not valid. Spaces are
-	 * allowed in the input, but they should be stripped before checking. All other
-	 * non-digit characters are disallowed.
-	 * 
-	 * Example 1: valid credit card number 1 4539 1488 0343 6467 The first step of
-	 * the Luhn algorithm is to double every second digit, starting from the right.
-	 * We will be doubling
-	 * 
-	 * 4_3_ 1_8_ 0_4_ 6_6_ If doubling the number results in a number greater than 9
-	 * then subtract 9 from the product. The results of our doubling:
-	 * 
-	 * 8569 2478 0383 3437 Then sum all of the digits:
-	 * 
-	 * 8+5+6+9+2+4+7+8+0+3+8+3+3+4+3+7 = 80 If the sum is evenly divisible by 10,
-	 * then the number is valid. This number is valid!
-	 * 
-	 * Example 2: invalid credit card number 1 8273 1232 7352 0569 Double the second
-	 * digits, starting from the right
-	 * 
-	 * 7253 2262 5312 0539 Sum the digits
-	 * 
-	 * 7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57 57 is not evenly divisible by 10, so
-	 * this number is not valid.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+		/**
+		 * 19. Given a number determine whether or not it is valid per the Luhn formula.
+		 * 
+		 * The Luhn algorithm is a simple checksum formula used to validate a variety of
+		 * identification numbers, such as credit card numbers and Canadian Social
+		 * Insurance Numbers.
+		 * 
+		 * The task is to check if a given string is valid.
+		 * 
+		 * Validating a Number Strings of length 1 or less are not valid. Spaces are
+		 * allowed in the input, but they should be stripped before checking. All other
+		 * non-digit characters are disallowed.
+		 * 
+		 * Example 1: valid credit card number 1 4539 1488 0343 6467 The first step of
+		 * the Luhn algorithm is to double every second digit, starting from the right.
+		 * We will be doubling
+		 * 
+		 * 4_3_ 1_8_ 0_4_ 6_6_ If doubling the number results in a number greater than 9
+		 * then subtract 9 from the product. The results of our doubling:
+		 * 
+		 * 8569 2478 0383 3437 Then sum all of the digits:
+		 * 
+		 * 8+5+6+9+2+4+7+8+0+3+8+3+3+4+3+7 = 80 If the sum is evenly divisible by 10,
+		 * then the number is valid. This number is valid!
+		 * 
+		 * Example 2: invalid credit card number 1 8273 1232 7352 0569 Double the second
+		 * digits, starting from the right
+		 * 
+		 * 7253 2262 5312 0539 Sum the digits
+		 * 
+		 * 7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57 57 is not evenly divisible by 10, so
+		 * this number is not valid.
+		 * 
+		 * @param string
+		 * @return
+		 */
+		public boolean isLuhnValid(String string) {
+			// TODO Write an implementation for this method declaration
+			return false;
+		}
 
-	/**
-	 * 20. Parse and evaluate simple math word problems returning the answer as an
-	 * integer.
-	 * 
-	 * Add two numbers together.
-	 * 
-	 * What is 5 plus 13?
-	 * 
-	 * 18
-	 * 
-	 * Now, perform the other three operations.
-	 * 
-	 * What is 7 minus 5?
-	 * 
-	 * 2
-	 * 
-	 * What is 6 multiplied by 4?
-	 * 
-	 * 24
-	 * 
-	 * What is 25 divided by 5?
-	 * 
-	 * 5
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
+		/**
+		 * 20. Parse and evaluate simple math word problems returning the answer as an
+		 * integer.
+		 * 
+		 * Add two numbers together.
+		 * 
+		 * What is 5 plus 13?
+		 * 
+		 * 18
+		 * 
+		 * Now, perform the other three operations.
+		 * 
+		 * What is 7 minus 5?
+		 * 
+		 * 2
+		 * 
+		 * What is 6 multiplied by 4?
+		 * 
+		 * 24
+		 * 
+		 * What is 25 divided by 5?
+		 * 
+		 * 5
+		 * 
+		 * @param string
+		 * @return
+		 */
+		public int solveWordProblem(String string) {
+			// TODO Write an implementation for this method declaration
+			return 0;
+		}
 
 }
