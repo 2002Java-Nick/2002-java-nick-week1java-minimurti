@@ -367,6 +367,11 @@ public class EvaluationService {
 					break;
 				}
 			}
+			
+			
+			if(word.charAt(0) == 'q' && word.charAt(1) == 'u') {///ay ickquay  exceptionay
+				firstVowelNum = 2;
+			}
 
 			for (int i = firstVowelNum; i < word.length(); i++) {
 				ret += word.charAt(i);
@@ -690,8 +695,29 @@ public class EvaluationService {
 		 * @return
 		 */
 		public boolean isValidIsbn(String string) {
-			// TODO Write an implementation for this method declaration
-			return false;
+			int numVals = 0;
+			int sum = 0;
+			for (int i = 0; i<string.length(); i++) {
+				if (Character.isDigit(string.charAt(i))) {
+					sum += ((int) string.charAt(i) - 48) * (10 - numVals);
+					numVals++;
+				}
+				
+				if (numVals == 9 && string.charAt(i) == 'X') {
+					sum+=10;
+					numVals++;
+				}
+			}
+			
+			if(numVals != 10 || sum%11 != 0)
+				return false;
+			
+			
+			
+			
+			
+			
+			return true;
 		}
 
 		/**
@@ -708,8 +734,31 @@ public class EvaluationService {
 		 * @return
 		 */
 		public boolean isPangram(String string) {
-			// TODO Write an implementation for this method declaration
-			return false;
+			boolean[] arr = new boolean[26];
+			for(int i = 0; i<26 ; i++)
+				arr[i] = false;///set the whole array to false
+			
+			for(int i = 0; i<string.length(); i++) {
+				if (string.charAt(i) >= 'A' && string.charAt(i) <= 'Z') {
+					arr[string.charAt(i) - 65] = true;//set the boolean array according to it's index to true based on the ASCII letter
+				}
+				
+				if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+					arr[string.charAt(i) - 97] = true;
+				}
+				
+			}
+			
+			for(int i = 0; i<26 ; i++) 
+				if (!arr[i])
+					return false;//go through the array and make sure everything is checked true. 
+			
+			
+			
+			
+			
+			
+			return true;
 		}
 
 		/**
@@ -722,6 +771,7 @@ public class EvaluationService {
 		 */
 		public Temporal getGigasecondDate(Temporal given) {
 			// TODO Write an implementation for this method declaration
+
 			return null;
 		}
 
@@ -739,8 +789,18 @@ public class EvaluationService {
 		 * @return
 		 */
 		public int getSumOfMultiples(int i, int[] set) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int sum = 0;
+			for(int j = 1 ; j < i; j++ ) {
+				for( int k = 0 ; k < set.length; k++ ) {
+					if(j % (set[k]) == 0) {
+						sum+=j;
+						break;//necessecary for no repeats
+					}
+				}
+			}
+			
+				
+			return sum;
 		}
 
 		/**
@@ -780,8 +840,41 @@ public class EvaluationService {
 		 * @return
 		 */
 		public boolean isLuhnValid(String string) {
-			// TODO Write an implementation for this method declaration
-			return false;
+			int sum = 0;
+			boolean everyOther = false;
+			int AddMe;
+			
+			for(int i = 0; i < string.length(); i++) {
+				if(Character.isDigit(string.charAt(i))) {
+					
+					if(everyOther) {
+						if(string.charAt(i) > '4')
+							sum += 2 * ((int) (string.charAt(i) - 48)) - 9;
+						else
+							sum += 2 * ((int) (string.charAt(i) - 48));
+						
+						everyOther = false;
+						
+					}
+					else {
+						sum += ((int) (string.charAt(i) - 48));
+						everyOther = true;
+					}
+						
+						
+						
+					
+					
+				}
+				else if( string.charAt(i) != ' ') {
+					return false;
+				}
+			}
+				
+			if(sum%10 != 0)
+				return false;
+				
+			return true;
 		}
 
 		/**
@@ -812,7 +905,28 @@ public class EvaluationService {
 		 * @return
 		 */
 		public int solveWordProblem(String string) {
-			// TODO Write an implementation for this method declaration
+
+			
+			String stringNo = string.substring(0, string.length() -1); //delete '?'
+			
+			String[] words = stringNo.split(" ");
+
+			
+			
+			System.out.println(words[3]);
+			if(words[3].equalsIgnoreCase("plus")) 
+				return Integer.parseInt(words[2]) + Integer.parseInt(words[4]);
+			
+			if(words[3].equalsIgnoreCase("minus"))
+				return Integer.parseInt(words[2]) - Integer.parseInt(words[4]);
+			
+			if(words[3].equalsIgnoreCase("multiplied"))
+				return Integer.parseInt(words[2]) * Integer.parseInt(words[5]);
+			
+			if(words[3].equalsIgnoreCase("divided"))
+				return Integer.parseInt(words[2]) / Integer.parseInt(words[5]);
+
+			int a = 0;
 			return 0;
 		}
 
