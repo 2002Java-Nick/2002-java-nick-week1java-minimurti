@@ -1,6 +1,10 @@
 package com.revature.eval.java.core;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.Temporal;
+import java.time.temporal.ChronoUnit;
+import java.time.Instant;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,8 +41,8 @@ public class EvaluationService {
 		acc += phrase.charAt(0);
 
 		for (int i = 0; i < phrase.length(); i++) {
-			if (phrase.charAt(i) == ' ') {
-				acc += phrase.charAt(i + 1);
+			if (!Character.isLetter(phrase.charAt(i)) && Character.isLetter(phrase.charAt(i + 1))) {
+				acc += phrase.toUpperCase().charAt(i + 1);
 			}
 		}
 
@@ -161,7 +165,7 @@ public class EvaluationService {
 				score += 3;
 			}
 
-			if (string.charAt(i) == 'H' || string.charAt(i) == 'h' || string.charAt(i) == 'V' || string.charAt(i) == 'v'
+			if (string.charAt(i) == 'F' || string.charAt(i) == 'f' || string.charAt(i) == 'H' || string.charAt(i) == 'h' || string.charAt(i) == 'V' || string.charAt(i) == 'v'
 					|| string.charAt(i) == 'W' || string.charAt(i) == 'w' || string.charAt(i) == 'Y'
 					|| string.charAt(i) == 'y') {
 				score += 4;
@@ -176,7 +180,7 @@ public class EvaluationService {
 				score += 5;
 			}
 
-			if (string.charAt(i) == 'Z' || string.charAt(i) == 'z') {
+			if (string.charAt(i) == 'Z' || string.charAt(i) == 'z' || string.charAt(i) == 'Q' || string.charAt(i) == 'q') {
 				score += 10;
 			}
 
@@ -249,19 +253,20 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 
-		String[] words = string.split(" ");
+		String[] words = string.split(" |,|-|\n");
 
-		Map<String, Integer> mapA = new HashMap<String, Integer>();
+		Map<String, Integer> mapA = new HashMap<>();
 
 		int old;
 
 		for (String word : words) {
-			if (!mapA.containsKey(word)) {
-				mapA.put(word, 1);
-			} else {
-				old = mapA.get(word);
-				mapA.put(word, old + 1);
-			}
+			if(!word.isBlank())/////for the very specific case of the newline character
+				if (!mapA.containsKey(word)) {
+					mapA.put(word, 1);
+				} else {
+					old = mapA.get(word);
+					mapA.put(word, old + 1);
+				}
 		}
 
 		return mapA;
@@ -304,10 +309,38 @@ public class EvaluationService {
 	 */
 	static class BinarySearch<T> {
 		private List<T> sortedList;
+		
+		
+		public int indexOfRecursion(T t, List<T> list) {
+			
+			//T value = list.get((list.size())/2);
+			
+			if(list.size() == 1) {
+//				if(list.get(0) != t && list.get(1) != t) 
+//					throw new IllegalArgumentException("Not In List");
+				
+				return 0;
+			}
+			
+			if(list.get((list.size())/2) == t) {
+				return (list.size())/2;
+			}
+			
+			List<T> sublist;
+			
+			if((int) list.get((list.size()+1)/2) > (int) t)
+				return indexOfRecursion(t,list.subList(0, (list.size())/2));
+			else
+				return indexOfRecursion(t, list.subList((list.size() + 1)/2,list.size() )) + (list.size() + 1)/2;
+			
+
+		}
+		
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			
+			return indexOfRecursion(t, sortedList);
+			
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -563,7 +596,7 @@ public class EvaluationService {
 			return true;
 		}
 
-		for (int j = 2; j < i; j++) {
+		for (int j = 2; j < i/2 + 1; j++) {
 			if (i % j == 0)
 				return false;
 		}
@@ -699,7 +732,7 @@ public class EvaluationService {
 			int sum = 0;
 			for (int i = 0; i<string.length(); i++) {
 				if (Character.isDigit(string.charAt(i))) {
-					sum += ((int) string.charAt(i) - 48) * (10 - numVals);
+					sum += ((int) string.charAt(i) - '0') * (10 - numVals);
 					numVals++;
 				}
 				
@@ -770,9 +803,10 @@ public class EvaluationService {
 		 * @return
 		 */
 		public Temporal getGigasecondDate(Temporal given) {
-			// TODO Write an implementation for this method declaration
+			
+			return given.plus(277777L, ChronoUnit.HOURS).plus(46L , ChronoUnit.MINUTES).plus(40, ChronoUnit.SECONDS);
 
-			return null;
+
 		}
 
 		/**
@@ -849,15 +883,15 @@ public class EvaluationService {
 					
 					if(everyOther) {
 						if(string.charAt(i) > '4')
-							sum += 2 * ((int) (string.charAt(i) - 48)) - 9;
+							sum += 2 * ((int) (string.charAt(i) - '0')) - 9;
 						else
-							sum += 2 * ((int) (string.charAt(i) - 48));
+							sum += 2 * ((int) (string.charAt(i) - '0'));
 						
 						everyOther = false;
 						
 					}
 					else {
-						sum += ((int) (string.charAt(i) - 48));
+						sum += ((int) (string.charAt(i) - '0'));
 						everyOther = true;
 					}
 						
@@ -913,7 +947,7 @@ public class EvaluationService {
 
 			
 			
-			System.out.println(words[3]);
+
 			if(words[3].equalsIgnoreCase("plus")) 
 				return Integer.parseInt(words[2]) + Integer.parseInt(words[4]);
 			
