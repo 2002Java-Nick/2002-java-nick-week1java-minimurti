@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.Temporal;
 import java.time.temporal.ChronoUnit;
@@ -804,7 +805,17 @@ public class EvaluationService {
 		 */
 		public Temporal getGigasecondDate(Temporal given) {
 			
-			return given.plus(277777L, ChronoUnit.HOURS).plus(46L , ChronoUnit.MINUTES).plus(40, ChronoUnit.SECONDS);
+			if( given instanceof LocalDate ) {
+				LocalDateTime blah = ((LocalDate) given).atStartOfDay();
+				return blah.plusSeconds(1000000000);
+			}
+			else
+				return  ((LocalDateTime)given).plusSeconds(1000000000);
+			
+			
+			
+			
+			
 
 
 		}
@@ -960,7 +971,7 @@ public class EvaluationService {
 			if(words[3].equalsIgnoreCase("divided"))
 				return Integer.parseInt(words[2]) / Integer.parseInt(words[5]);
 
-			int a = 0;
+
 			return 0;
 		}
 
